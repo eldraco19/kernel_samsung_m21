@@ -220,6 +220,5 @@ config SENSORS_ISG5320A_SUB
 	  If you say yes here if you use ISG5320A_SUB for grip sub.
 	  This option enables grip sensors using
 	  IMAGIS ISG5320A_SUB device driver for grip sub.
-	  
+ 
 source "drivers/sensorhub/factory/Kconfig"
-
