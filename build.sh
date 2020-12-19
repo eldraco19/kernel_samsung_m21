@@ -20,7 +20,7 @@ fi
 
 if [ ! -d gcc ]
 then
-        echo "Downloading clang...."
+        echo "Downloading gcc...."
 	git clone --depth=1 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 gcc
 fi
 
@@ -46,7 +46,7 @@ function compile() {
 		echo -e "${GRN}"
 		echo "------------------------------------------------------------"
 		echo "Compilation successful..."
-        	echo "Image.gz can be found at out/arch/arm64/boot/Image.gz-dtb"
+        	echo "Image.gz can be found at out/arch/arm64/boot/Image.gz"
 		echo  "------------------------------------------------------------"
 		echo -e "${RST}"
 	else
