@@ -131,3 +131,15 @@ scripts/crypto/__pycache__/
 scripts/fmp/__pycache__/
 security/samsung/defex_lsm/defex_packed_rules.inc
 security/samsung/defex_lsm/pack_rules
+
+# toolchains
+clang/*
+gcc/*
+
+# reverse dts
+arch/arm64/boot/dts/exynos/*.reverse.dts
+arch/arm64/boot/dts/samsung/*.reverse.dts
+
+# other random stuff
+arch/arm64/crypto/sha256-core.S
+lib/libdss.c
