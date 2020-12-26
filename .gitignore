@@ -132,7 +132,7 @@ scripts/fmp/__pycache__/
 
 # toolchains
 clang/*
-gcc/*
+gcc/
 
 # reverse dts
 arch/arm64/boot/dts/exynos/*.reverse.dts
