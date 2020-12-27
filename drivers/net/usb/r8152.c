@@ -7454,7 +7454,7 @@ static struct usb_device_id rtl8152_table[] = {
 	/* Nvidia */
 	{REALTEK_USB_DEVICE_INTERFACE_CLASS(VENDOR_ID_NVIDIA,  0x09ff)},
 	{REALTEK_USB_DEVICE_INTERFACE_CLASS_AND_INTERFACE_INFO(VENDOR_ID_NVIDIA,  0x09ff)},
-	{}
+		{}
 };
 
 MODULE_DEVICE_TABLE(usb, rtl8152_table);
