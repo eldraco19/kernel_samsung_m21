@@ -31,6 +31,10 @@ function compile() {
 	if [ ! -d gcc ]; then
         	echo "Downloading gcc...."
 		git clone --depth=1 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 gcc 
+	else
+		cd gcc;
+		git reset --hard HEAD;
+		cd ..
 	fi
 	echo "Done"
 
