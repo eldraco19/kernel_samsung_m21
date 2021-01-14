@@ -3890,9 +3890,15 @@ static void sec_bat_calc_time_to_full(struct sec_battery_info * battery)
 				battery->pdata->max_charging_current)
 				charge = battery->pdata->ttf_hv_charge_current; /* same PD power with AFC */
 			else
-				charge = battery->pd_max_charge_power / 5; /* other PD charging */
+				charge = (battery->pd_max_charge_power / 5) > battery->pdata->charging_current[battery->cable_type].fast_charging_current ?
+					battery->pdata->charging_current[battery->cable_type].fast_charging_current : (battery->pd_max_charge_power / 5);
 		} else {
-			charge = battery->max_charge_power / 5;
+			charge = (battery->max_charge_power / 5) > battery->pdata->charging_current[battery->cable_type].fast_charging_current ?
+					battery->pdata->charging_current[battery->cable_type].fast_charging_current : (battery->max_charge_power / 5);
+			/* if rp3 ttf current  > ttf_hv_current, set ttf_hv_current */
+			if ((battery->pdic_info.sink_status.rp_currentlvl == RP_CURRENT_LEVEL3) &&
+				(charge > battery->pdata->ttf_hv_charge_current))
+				charge = battery->pdata->ttf_hv_charge_current;
 		}
 		value.intval = charge;
 		psy_do_property(battery->pdata->fuelgauge_name, get,
@@ -7353,7 +7359,7 @@ static int batt_handle_notification(struct notifier_block *nb,
 				(battery->muic_cable_type == ATTACHED_DEV_JIG_USB_ON_MUIC ? BATT_MISC_EVENT_UNDEFINED_RANGE_TYPE : 0);
 	}
 #endif
-	block_water_event |= (battery->muic_cable_type == ATTACHED_DEV_UNDEFINED_RANGE_MUIC) ? BATT_MISC_EVENT_UNDEFINED_RANGE_TYPE : 0);
+	block_water_event |= (battery->muic_cable_type == ATTACHED_DEV_UNDEFINED_RANGE_MUIC ? BATT_MISC_EVENT_UNDEFINED_RANGE_TYPE : 0);
 	sec_bat_set_misc_event(battery, block_water_event, BATT_MISC_EVENT_UNDEFINED_RANGE_TYPE);
 
 	if (battery->muic_cable_type == ATTACHED_DEV_HICCUP_MUIC) {

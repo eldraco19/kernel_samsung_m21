@@ -318,6 +318,7 @@ enum fimc_is_sensor_state {
 	FIMC_IS_SENSOR_ITF_REGISTER,	/* to check whether sensor interfaces are registered */
 	FIMC_IS_SENSOR_WAIT_STREAMING,
 	SENSOR_MODULE_GOT_INTO_TROUBLE,
+	IS_SENSOR_S_POWER,
 };
 
 enum sensor_subdev_internel_use {

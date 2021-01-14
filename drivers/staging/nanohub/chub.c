@@ -859,8 +859,8 @@ static int contexthub_download_and_check_image(struct contexthub_ipc_info *ipc, 
 		int i;
 		u32 *fw_image = (u32 *)ipc_get_base(reg);
 
-		dev_err(ipc->dev, "%s: fw(%lx) doens't match with size %d\n",
-			__func__, (unsigned long)ipc_get_base(reg), ipc_get_offset(reg));
+		dev_err(ipc->dev, "%s: fw doens't match with size %d\n",
+			__func__, ipc_get_offset(reg));
 		for (i = 0; i < ipc_get_offset(reg) / 4; i++)
 			if (fw[i] != fw_image[i]) {
 				dev_err(ipc->dev, "fw[%d] %x -> wrong %x\n", i, fw_image[i], fw[i]);
@@ -1050,8 +1050,8 @@ int contexthub_download_image(struct contexthub_ipc_info *ipc, enum ipc_region r
 		return ret;
 	}
 	memcpy(ipc_get_base(reg), entry->data, entry->size);
-	dev_info(ipc->dev, "%s: bl:%d, bin(size:%d) on %lx\n",
-		 __func__, reg == IPC_REG_BL, (int)entry->size, (unsigned long)ipc_get_base(reg));
+	dev_info(ipc->dev, "%s: bl:%d, bin(size:%d)\n",
+		 __func__, reg == IPC_REG_BL, (int)entry->size);
 	release_firmware(entry);
 
 	return 0;
@@ -1163,8 +1163,8 @@ static irqreturn_t contexthub_irq_handler(int irq, void *data)
 	contexthub_put_token(ipc);
 
 	if (err) {
-		pr_err("inval irq err(%d):start_irqnum:%d,evt(%p):%d,irq_hw:%d,status_reg:0x%x(0x%x,0x%x)\n",
-		       err, start_index, cur_evt, evt, irq_num,
+		pr_err("inval irq err(%d):start_irqnum:%d,evt:%d,irq_hw:%d,status_reg:0x%x(0x%x,0x%x)\n",
+		       err, start_index, evt, irq_num,
 		       status, ipc_hw_read_int_status_reg(AP),
 		       ipc_hw_read_int_gen_reg(AP));
 		ipc_hw_clear_all_int_pend_reg(AP);

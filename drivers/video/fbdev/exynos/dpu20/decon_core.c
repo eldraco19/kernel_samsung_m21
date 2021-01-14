@@ -781,6 +781,12 @@ static int _decon_disable(struct decon_device *decon, enum decon_state state)
 		decon->eint_status = 0;
 	}
 
+	if (decon->dt.out_type == DECON_OUT_DSI && decon->dt.psr_mode == DECON_VIDEO_MODE) { 
+		struct dsim_device *dsim; 
+		dsim = v4l2_get_subdevdata(decon->out_sd[0]); 
+		call_panel_ops(dsim, suspend, dsim); 
+	} 
+
 	ret = decon_reg_stop(decon->id, decon->dt.out_idx[0], &psr, true,
 			decon->lcd_info->fps);
 	if (ret < 0)
@@ -1909,7 +1915,7 @@ static int __decon_update_regs(struct decon_device *decon, struct decon_reg_data
 		goto trigger_done;
 #endif
 
-	if (decon_reg_start(decon->id, &psr) < 0) {
+	if (decon_reg_start(decon->id, &psr) < 0 && !decon->ignore_vsync) {
 		decon_up_list_saved();
 		decon_dump(decon);
 #ifdef CONFIG_LOGGING_BIGDATA_BUG
@@ -2260,7 +2266,7 @@ static void decon_update_regs(struct decon_device *decon,
 
 	decon_to_psr_info(decon, &psr);
 	if (regs->num_of_window) {
-		if (__decon_update_regs(decon, regs) < 0) {
+		if (__decon_update_regs(decon, regs) < 0 && !decon->ignore_vsync) {
 #if defined(CONFIG_EXYNOS_AFBC_DEBUG)
 			decon_dump_afbc_handle(decon, old_dma_bufs);
 #endif
@@ -2300,7 +2306,7 @@ static void decon_update_regs(struct decon_device *decon,
 			decon_set_cursor_unmask(decon, false);
 
 		decon_wait_for_vstatus(decon, 50);
-		if (decon_reg_wait_update_done_timeout(decon->id, SHADOW_UPDATE_TIMEOUT) < 0) {
+		if (decon_reg_wait_update_done_timeout(decon->id, SHADOW_UPDATE_TIMEOUT) < 0 && !decon->ignore_vsync) {
 #if defined(CONFIG_EXYNOS_READ_ESD_SOLUTION)
 			if (decon_is_bypass(decon))
 				goto end;
